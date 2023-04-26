@@ -3,9 +3,17 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
+import postRoutes from './routes/posts.js';
+
 /* This is creating an instance of the Express application. This instance will be
 used to define the routes and middleware for the application. */
 const app = express();
+
+/* It sets up a route for the Express application. It is telling
+the application to use the `postRoutes` middleware for any requests that start with the `/posts`
+path. This means that any requests to the `/posts` path will be handled by the `postRoutes`
+middleware, which is defined in the `./routes/posts` file. */
+app.use('/posts', postRoutes);
 
 /* `app.use(bodyParser.json({ limit: "30mb", extended: true }));` is setting up middleware for the
 Express application to parse incoming JSON data. The `bodyParser.json()` middleware parses the JSON
