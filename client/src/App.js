@@ -1,8 +1,16 @@
 import React from 'react';
+import { Container, AppBar, Typography, Grow, Grid } from '@mui/material';
+
+import memories from './images/memories.png';
 
 const App = () => {
   return (
-    <div>App</div>
+    <Container maxWidth="lg">
+      <AppBar position="static" color="inherit">
+        <Typography variant="h2" align="center">MemoryMingle</Typography>
+        <img src={memories} alt="memories"  height="60" />
+      </AppBar>
+    </Container>
   )
 }
 
