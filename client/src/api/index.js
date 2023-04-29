@@ -22,3 +22,10 @@ export const createPost = (newPost) => axios.post(url, newPost);
  * `id`.
  */
 export const updatePost = (id, updatedPost) => axios.patch(`${url}/${id}`, updatedPost);
+/**
+ * This function uses Axios to send a DELETE request to a specified URL with a given ID to delete a
+ * post.
+ * @param id - The `id` parameter is a unique identifier for a post that needs to be deleted. It is
+ * used in the URL to specify which post should be deleted.
+ */
+export const deletePost = (id) => axios.delete(`${url}/${id}`);

@@ -54,3 +54,21 @@ export const updatePost = (id, post) => async (dispatch) => {
     console.log(error);
   }
 }
+
+export const deletePost = (id) => async (dispatch) => {
+  try {
+    /* `await api.deletePost(id);` is calling the `deletePost()` function from the `api` module and
+    passing in the `id` parameter. The `await` keyword is used to wait for the function to complete
+    before moving on to the next line of code. This function is responsible for deleting a post with
+    the specified `id` from the database. */
+    await api.deletePost(id);
+
+    /* `dispatch({ type: 'DELETE', payload: id });` is dispatching an action to the Redux store with a
+    type of `'DELETE'` and a payload of `id`. This action will be handled by the reducer function
+    associated with the `'DELETE'` type, which will update the state of the store by removing the
+    post with the specified `id`. */
+    dispatch({ type: 'DELETE', payload: id });
+  } catch (error) {
+    console.log(error);
+  }
+}

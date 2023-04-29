@@ -33,6 +33,14 @@ const reducer = (posts = [], action) => {
       modified directly, which is important for maintaining the principle of immutability in Redux.
       The updated array of posts is then returned as the new state of the reducer. */
       return posts.map((post) => post._id === action.payload._id ? action.payload : post);
+    case 'DELETE':
+      /* This line of code is handling the 'DELETE' action in the reducer. It is using the `filter()`
+      method to create a new array of posts where each post is included only if its `_id` property
+      does not match the `_id` property of the `action.payload` object. This ensures that the post
+      with the matching `_id` is removed from the original `posts` array without modifying it
+      directly, which is important for maintaining the principle of immutability in Redux. The
+      updated array of posts is then returned as the new state of the reducer. */
+      return posts.filter((post) => post._id === action.payload);
     default:
       return posts;
   }

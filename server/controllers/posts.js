@@ -74,7 +74,7 @@ export const updatePost = async (req, res) => {
   available". This is to ensure that the request is only processed if a valid ObjectId is provided,
   and to handle cases where an invalid or non-existent ObjectId is provided in the request. */
   if(!mongoose.Types.ObjectId.isValid(_id)) {
-    return res.status(404).send('No posts with that id available');
+    return res.status(404).send('No posts with that id found');
   }
 
   /* `const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, { new: true });` is updating a
@@ -88,4 +88,22 @@ export const updatePost = async (req, res) => {
   `updatedPost` variable. The `json()` method is a built-in method in Express.js that sends a JSON
   response to the client. */
   res.json(updatedPost);
+}
+
+export const deletePost = async (req, res) => {
+  const { id } = req.params;
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).send('No posts with that id found');
+  }
+
+  /* `await PostMessage.findByIdAndRemove(id);` is a Mongoose method that finds a document in the
+  `PostMessage` collection with the given `id` and removes it from the database. The `await` keyword
+  is used to wait for the database operation to complete before moving on to the next line of code. */
+  await PostMessage.findByIdAndRemove(id);
+
+  /* `res.json({ message: 'Post deleted successfully' });` is sending a JSON response to the client
+  with a message indicating that the post was deleted successfully. The `json()` method is a
+  built-in method in Express.js that sends a JSON response to the client. */
+  res.json({ message: 'Post deleted successfully' });
 }
