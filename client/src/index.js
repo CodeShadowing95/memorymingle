@@ -5,6 +5,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import reducers from './reducers';
 
 import App from './App';
+import './index.css';
 
 /* `const store = configureStore({ reducer: reducers });` is creating a Redux store using the
 `configureStore` function from the `@reduxjs/toolkit` library. The `reducer` key in the

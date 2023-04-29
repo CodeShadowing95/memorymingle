@@ -1,5 +1,6 @@
 // There we'll create all the handlers for our routes
 
+import mongoose from 'mongoose';
 import PostMessage from '../models/postMessage.js';
 
 export const getPosts = async (req, res) => {
@@ -52,4 +53,39 @@ export const createPost = async (req, res) => {
     such as when trying to create a resource that already exists. */
     res.status(409).json({ message: error.message });
   }
+}
+
+export const updatePost = async (req, res) => {
+  /* `const { id: _id} = req.params;` is destructuring the `id` property from the `req.params` object
+  and assigning it to a new variable `_id`. This is commonly used in Express.js to rename properties
+  of an object to a different variable name for easier use in the code. In this case, it is likely
+  that the `id` property is the ID of a post in the database, and it is being renamed to `_id` to
+  match the naming convention used by MongoDB for its ObjectIds. */
+  const { id: _id} = req.params;
+  /* `const post = req.body;` is assigning the value of the `req.body` object to a new constant
+  variable called `post`. The `req.body` object contains the data submitted in the request body,
+  which is likely the data for a new post that the user is trying to create. This `post` variable
+  will be used to create a new instance of the `PostMessage` model and save it to the database in
+  the `createPost` function. */
+  const post = req.body;
+
+  /* This code is checking if the `_id` parameter passed in the request is a valid MongoDB ObjectId. If
+  it is not a valid ObjectId, it returns a 404 response with the message "No posts with that id
+  available". This is to ensure that the request is only processed if a valid ObjectId is provided,
+  and to handle cases where an invalid or non-existent ObjectId is provided in the request. */
+  if(!mongoose.Types.ObjectId.isValid(_id)) {
+    return res.status(404).send('No posts with that id available');
+  }
+
+  /* `const updatedPost = await PostMessage.findByIdAndUpdate(_id, post, { new: true });` is updating a
+  post in the database with the given `_id` and `post` data. It uses the `findByIdAndUpdate()`
+  method provided by Mongoose to find a post with the given `_id` and update it with the data in the
+  `post` object. The `{ new: true }` option is used to return the updated post after it has been
+  updated in the database. The updated post is then stored in the `updatedPost` constant variable. */
+  const updatedPost = await PostMessage.findByIdAndUpdate(_id, {...post, _id }, { new: true });
+
+  /* `res.json(updatedPost);` is sending a JSON response with the updated post data in the
+  `updatedPost` variable. The `json()` method is a built-in method in Express.js that sends a JSON
+  response to the client. */
+  res.json(updatedPost);
 }

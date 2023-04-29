@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, AppBar, Typography, Grow, Grid } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 
@@ -9,19 +9,21 @@ import memories from './images/memories1.png';
 import useStyles from './styles';
 
 const App = () => {
+  const [currentId, setCurrentId] = useState(null);
   const classes = useStyles();
   /* `const dispatch = useDispatch();` is using the `useDispatch` hook from the `react-redux` library
   to get access to the `dispatch` function. The `dispatch` function is used to dispatch actions to
   the Redux store, which can then update the state of the application. */
   const dispatch = useDispatch();
 
-  /* `useEffect(() => { dispatch(getPosts()); }, [dispatch]);` is a React hook that is used to perform
-  side effects in a functional component. In this case, it is dispatching the `getPosts()` action to
-  the Redux store when the component mounts or when the `dispatch` function changes. This will
-  trigger the Redux store to fetch the posts data and update the state of the application. */
+  /* `useEffect(() => { dispatch(getPosts()); }, [currentId, dispatch]);` is a React hook that is used
+  to perform side effects in a functional component. In this case, it is dispatching the
+  `getPosts()` action to the Redux store when the component mounts or when the `currentId` or
+  `dispatch` values change. This will trigger the Redux store to fetch the posts data and update the
+  state of the application. */
   useEffect(() => {
     dispatch(getPosts());
-  }, [dispatch]);
+  }, [currentId, dispatch]);
   
 
   return (
@@ -34,10 +36,10 @@ const App = () => {
         <Container>
           <Grid container justifyContent="space-between" alignItems="stretch" spacing={3}>
             <Grid item xs={12} sm={7}>
-              <Posts />
+              <Posts setCurrentId={setCurrentId} />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Form />
+              <Form currentId={currentId} setCurrentId={setCurrentId} />
             </Grid>
           </Grid>
         </Container>
