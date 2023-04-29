@@ -9,12 +9,6 @@ import postRoutes from './routes/posts.js';
 used to define the routes and middleware for the application. */
 const app = express();
 
-/* It sets up a route for the Express application. It is telling
-the application to use the `postRoutes` middleware for any requests that start with the `/posts`
-path. This means that any requests to the `/posts` path will be handled by the `postRoutes`
-middleware, which is defined in the `./routes/posts` file. */
-app.use('/posts', postRoutes);
-
 /* `app.use(bodyParser.json({ limit: "30mb", extended: true }));` is setting up middleware for the
 Express application to parse incoming JSON data. The `bodyParser.json()` middleware parses the JSON
 data in the request body and makes it available in `req.body` of the route handler. The `limit`
@@ -34,6 +28,12 @@ pages from making requests to a different domain than the one that served the we
 resources. This is useful when building APIs that need to be accessed by clients from different
 domains. */
 app.use(cors());
+
+/* It sets up a route for the Express application. It is telling
+the application to use the `postRoutes` middleware for any requests that start with the `/posts`
+path. This means that any requests to the `/posts` path will be handled by the `postRoutes`
+middleware, which is defined in the `./routes/posts` file. */
+app.use('/posts', postRoutes);
 
 // Connect the server application with the real database
 const CONNECTION_URL = 'mongodb+srv://hwarblade:789Atlas123@mmcluster.9pttnqf.mongodb.net/test';
