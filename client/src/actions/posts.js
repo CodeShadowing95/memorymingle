@@ -18,3 +18,17 @@ export const getPosts = () => async (dispatch) => {
     console.log(error.message);
   }
 }
+
+export const createPost = (post) => async (dispatch) => {
+  try {
+    /* `const { data } = await api.createPost(post);` is destructuring the response object returned by
+    the `createPost()` function from the `api` module. It is extracting the `data` property from the
+    response object and assigning it to a variable named `data`. This allows us to access the `data`
+    property directly without having to reference the response object every time. */
+    const { data } = await api.createPost(post);
+
+    dispatch({ type: 'CREATE', payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+}

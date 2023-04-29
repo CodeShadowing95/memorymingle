@@ -18,7 +18,7 @@ const reducer = (posts = [], action) => {
       being replaced with the new array of posts that is contained in the `payload` property. */
       return action.payload;
     case 'CREATE':
-      return posts;
+      return [...posts, action.payload];
     default:
       return posts;
   }
