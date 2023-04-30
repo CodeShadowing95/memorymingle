@@ -107,3 +107,16 @@ export const deletePost = async (req, res) => {
   built-in method in Express.js that sends a JSON response to the client. */
   res.json({ message: 'Post deleted successfully' });
 }
+
+export const likePost = async (req, res) => {
+  const { id } = req.params;
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).send('No posts with that id found');
+  }
+
+  const post = await PostMessage.findById(id);
+  const likedPost = await PostMessage.findByIdAndUpdate(id, { likeCount: post.likeCount + 1 }, { new: true });
+
+  res.json(likedPost);
+}

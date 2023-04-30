@@ -29,3 +29,9 @@ export const updatePost = (id, updatedPost) => axios.patch(`${url}/${id}`, updat
  * used in the URL to specify which post should be deleted.
  */
 export const deletePost = (id) => axios.delete(`${url}/${id}`);
+/**
+ * This function sends a PATCH request to like a post with a specific ID using Axios in JavaScript.
+ * @param id - The `id` parameter is a unique identifier for a post that is being liked. It is used in
+ * the URL to make a PATCH request to the server to update the like count for that specific post.
+ */
+export const likePost = (id) => axios.patch(`${url}/${id}/likePost`);
