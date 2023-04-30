@@ -42,7 +42,7 @@ const reducer = (posts = [], action) => {
       with the matching `_id` is removed from the original `posts` array without modifying it
       directly, which is important for maintaining the principle of immutability in Redux. The
       updated array of posts is then returned as the new state of the reducer. */
-      return posts.filter((post) => post._id === action.payload);
+      return posts.filter((post) => post._id !== action.payload);
     case LIKE:
       // Similar to UPDATE
       return posts.map((post) => post._id === action.payload._id ? action.payload : post);
