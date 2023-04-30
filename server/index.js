@@ -2,12 +2,15 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import dotenv from 'dotenv';
 
 import postRoutes from './routes/posts.js';
 
 /* This is creating an instance of the Express application. This instance will be
 used to define the routes and middleware for the application. */
 const app = express();
+
+dotenv.config();
 
 /* `app.use(bodyParser.json({ limit: "30mb", extended: true }));` is setting up middleware for the
 Express application to parse incoming JSON data. The `bodyParser.json()` middleware parses the JSON
@@ -36,7 +39,6 @@ middleware, which is defined in the `./routes/posts` file. */
 app.use('/posts', postRoutes);
 
 // Connect the server application with the real database
-const CONNECTION_URL = 'mongodb+srv://hwarblade:789Atlas123@mmcluster.9pttnqf.mongodb.net/test';
 const PORT = process.env.PORT || 5000;
 
 /* This code is connecting the Express server application to a MongoDB database using Mongoose. It is
@@ -44,6 +46,6 @@ using the `mongoose.connect()` method to establish a connection to the database 
 `CONNECTION_URL` variable. Once the connection is established, it is starting the server application
 by calling the `app.listen()` method and passing in the `PORT` variable. If there is an error in
 establishing the connection, it is being caught and logged to the console. */
-mongoose.connect(CONNECTION_URL)
+mongoose.connect(process.env.CONNECTION_URL)
 .then(() => app.listen(PORT, () => console.log(`Server running on port: ${PORT}`)))
 .catch((error) => console.log(error.message));

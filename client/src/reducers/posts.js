@@ -1,3 +1,5 @@
+import { FETCH_ALL, CREATE, UPDATE, DELETE, LIKE } from '../constants/actionTypes';
+
 /**
  * This is a reducer function that handles two actions, 'FETCH_ALL' and 'CREATE', but currently returns
  * the same 'posts' array for both actions.
@@ -12,12 +14,12 @@
  */
 const reducer = (posts = [], action) => {
   switch (action.type) {
-    case 'FETCH_ALL':
+    case FETCH_ALL:
       /* `return action.payload;` is returning the `payload` property of the `action` object when the
       `type` property of the `action` object is `'FETCH_ALL'`. This means that the `posts` array is
       being replaced with the new array of posts that is contained in the `payload` property. */
       return action.payload;
-    case 'CREATE':
+    case CREATE:
       /* `[...posts, action.payload]` is creating a new array that includes all the elements of the
       `posts` array (using the spread operator `...`) and adding the `action.payload` object to the
       end of the new array. This is used in the 'CREATE' case of the reducer to add a new post to
@@ -25,7 +27,7 @@ const reducer = (posts = [], action) => {
       the reducer ensures that it is following the principle of immutability, which is important for
       predictable state management in Redux. */
       return [...posts, action.payload];
-    case 'UPDATE':
+    case UPDATE:
       /* This line of code is handling the 'UPDATE' action in the reducer. It is using the `map()`
       method to create a new array of posts where each post is either the updated post (if its `_id`
       property matches the `_id` property of the `action.payload` object) or the original post (if
@@ -33,7 +35,7 @@ const reducer = (posts = [], action) => {
       modified directly, which is important for maintaining the principle of immutability in Redux.
       The updated array of posts is then returned as the new state of the reducer. */
       return posts.map((post) => post._id === action.payload._id ? action.payload : post);
-    case 'DELETE':
+    case DELETE:
       /* This line of code is handling the 'DELETE' action in the reducer. It is using the `filter()`
       method to create a new array of posts where each post is included only if its `_id` property
       does not match the `_id` property of the `action.payload` object. This ensures that the post
@@ -41,7 +43,7 @@ const reducer = (posts = [], action) => {
       directly, which is important for maintaining the principle of immutability in Redux. The
       updated array of posts is then returned as the new state of the reducer. */
       return posts.filter((post) => post._id === action.payload);
-    case 'LIKE':
+    case LIKE:
       // Similar to UPDATE
       return posts.map((post) => post._id === action.payload._id ? action.payload : post);
     default:

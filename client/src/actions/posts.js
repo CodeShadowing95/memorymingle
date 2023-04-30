@@ -1,3 +1,4 @@
+import { FETCH_ALL, CREATE, UPDATE, DELETE, LIKE } from '../constants/actionTypes';
 import * as api from '../api';
 
 //Action Creators
@@ -13,7 +14,7 @@ export const getPosts = () => async (dispatch) => {
     The action has a type of `'FETCH_ALL'` and a payload of `data`. This action will be handled by
     the reducer function associated with the `'FETCH_ALL'` type, which will update the state of the
     store with the new data. */
-    dispatch({ type: 'FETCH_ALL', payload: data });
+    dispatch({ type: FETCH_ALL, payload: data });
   } catch (error) {
     console.log(error.message);
   }
@@ -31,7 +32,7 @@ export const createPost = (post) => async (dispatch) => {
     a type of `'CREATE'` and a payload of `data`. This action will be handled by the reducer
     function associated with the `'CREATE'` type, which will update the state of the store with the
     new data. */
-    dispatch({ type: 'CREATE', payload: data });
+    dispatch({ type: CREATE, payload: data });
   } catch (error) {
     console.log(error);
   }
@@ -49,7 +50,7 @@ export const updatePost = (id, post) => async (dispatch) => {
     a type of `'UPDATE'` and a payload of `data`. This action will be handled by the reducer
     function associated with the `'UPDATE'` type, which will update the state of the store with the
     updated data. */
-    dispatch({ type: 'UPDATE', payload: data });
+    dispatch({ type: UPDATE, payload: data });
   } catch (error) {
     console.log(error);
   }
@@ -67,7 +68,7 @@ export const deletePost = (id) => async (dispatch) => {
     type of `'DELETE'` and a payload of `id`. This action will be handled by the reducer function
     associated with the `'DELETE'` type, which will update the state of the store by removing the
     post with the specified `id`. */
-    dispatch({ type: 'DELETE', payload: id });
+    dispatch({ type: DELETE, payload: id });
   } catch (error) {
     console.log(error);
   }
@@ -77,7 +78,7 @@ export const likePost = (id) => async (dispatch) => {
   try {
     const { data } = await api.likePost(id);
 
-    dispatch({ type: 'LIKE', payload: data });
+    dispatch({ type: LIKE, payload: data });
   } catch (error) {
     console.log(error);
   }
