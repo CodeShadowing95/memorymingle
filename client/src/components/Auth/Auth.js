@@ -2,14 +2,22 @@ import React, { useState } from 'react';
 import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import PersonOutlinedIcon from '@material-ui/icons/PersonOutlined';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+// React OAuth2 | Google
+import { useGoogleLogin } from '@react-oauth/google';
 
 import useStyles from './styles';
 import Input from './Input';
+import Icon from './Icon';
 
 const Auth = () => {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = () => {
 
@@ -19,12 +27,42 @@ const Auth = () => {
 
   }
 
+  /**
+   * This function toggles the value of a state variable called "isSignUp".
+   */
   const switchMode = () => setIsSignUp((signedUp) => !signedUp);
 
   /**
    * This function toggles the visibility of a password input field.
    */
   const handleShowPassword = () => setShowPassword((seePassword) => !seePassword);
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: (codeResponse) => {
+      axios.get(`https://www.googleapis.com/oauth2/v1/userinfo? 
+      access_token=${codeResponse.access_token}`,
+      {
+        headers: {
+          Authorization: `Bearer ${codeResponse.access_token}`,
+          Accept: "application/json",
+        },
+      }).then(async (res) => {
+        // console.log(res);
+        const result = res?.data;
+        const token = codeResponse.access_token;
+        try {
+          dispatch({ type: "AUTH", data: { result, token } })
+
+          navigate("/");
+        } catch (error) {
+          console.log("Connection Failure. Try again later.");
+        }
+      }).catch((err) => console.log("Login Failure " + err))
+    },
+    onError: res => console.error('Failed to login', res),
+  });
+
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -48,6 +86,20 @@ const Auth = () => {
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
             {isSignUp ? 'Sign Up' : 'Sign In'}
           </Button>
+
+          {/* Google Login */}
+          <Button
+            className={classes.googleButton}
+            color="secondary"
+            fullWidth
+            // onClick={() => googleLogin()}
+            onClick={googleLogin}
+            startIcon={<Icon />}
+            variant="contained"
+          >
+            Connect with Google
+          </Button>
+
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Button onClick={switchMode}>
