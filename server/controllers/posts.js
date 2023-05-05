@@ -109,14 +109,62 @@ export const deletePost = async (req, res) => {
 }
 
 export const likePost = async (req, res) => {
+  /* `const { id } = req.params;` is destructuring the `id` property from the `req.params` object and
+  assigning it to a new variable `id`. This is commonly used in Express.js to extract specific
+  properties from an object and assign them to variables for easier use in the code. In this case,
+  it is likely that the `id` property is the ID of a post in the database, and it is being extracted
+  from the `req.params` object to be used in the route handler function. */
   const { id } = req.params;
 
+  /* This code is checking if the `userId` property is present in the `req` object. If it is not
+  present, it means that the user is not authenticated and the function returns a JSON response with
+  a message indicating that the user is unauthenticated. This is likely used to restrict access to
+  certain routes or actions to only authenticated users. */
+  if(!req.userId) return res.json({ message: 'Unauthenticated' });
+
+  /* This code is checking if the `id` parameter passed in the request is a valid MongoDB ObjectId. If
+  it is not a valid ObjectId, it returns a 404 response with the message "No posts with that id
+  found". This is to ensure that the request is only processed if a valid ObjectId is provided, and
+  to handle cases where an invalid or non-existent ObjectId is provided in the request. */
   if(!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).send('No posts with that id found');
   }
 
+  /* `const post = await PostMessage.findById(id);` is querying the database to find a post with the
+  specified `id` using the `findById()` method provided by Mongoose. The `await` keyword is used to
+  wait for the database operation to complete before moving on to the next line of code. The
+  retrieved post is then stored in the `post` constant variable. */
   const post = await PostMessage.findById(id);
-  const likedPost = await PostMessage.findByIdAndUpdate(id, { likeCount: post.likeCount + 1 }, { new: true });
+
+  /* `const index = post.likes.findIndex((id) => id === String(req.userId));` is finding the index of
+  the `req.userId` in the `likes` array of a post. It uses the `findIndex()` method to iterate over
+  the `likes` array and return the index of the first element that satisfies the provided testing
+  function, which in this case is checking if the `id` is equal to the `req.userId`. The index of
+  the element is then stored in the `index` constant variable. */
+  const index = post.likes.findIndex((id) => id === String(req.userId));
+
+  if(index === -1) {
+    /* `post.likes.push(req.userId);` is adding the `req.userId` to the `likes` array of a post. This
+    is likely used to keep track of which users have liked a particular post. If the `req.userId` is
+    not already in the `likes` array, it is added to the end of the array using the `push()` method. */
+    post.likes.push(req.userId);
+  } else {
+    /* `post.likes = post.likes.filter((id) => id !== String(req.userId));` is removing the
+    `req.userId` from the `likes` array of a post. It uses the `filter()` method to iterate over the
+    `likes` array and return a new array that excludes the `req.userId`. The new array is then
+    assigned back to the `likes` property of the `post` object. This is likely used to keep track of
+    which users have liked a particular post and to allow users to unlike a post if they change
+    their mind. */
+    post.likes = post.likes.filter((id) => id !== String(req.userId));
+  }
+
+  /* `const likedPost = await PostMessage.findByIdAndUpdate(id, { likeCount: post.likeCount + 1 }, {
+  new: true });` is updating a post in the database with the given `id` by incrementing the
+  `likeCount` property by 1. It uses the `findByIdAndUpdate()` method provided by Mongoose to find a
+  post with the given `id` and update it with the new `likeCount` value. The `{ new: true }` option
+  is used to return the updated post after it has been updated in the database. The updated post is
+  then stored in the `likedPost` constant variable. */
+  const likedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
 
   res.json(likedPost);
 }
