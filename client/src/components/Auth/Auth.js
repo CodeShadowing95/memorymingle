@@ -11,20 +11,41 @@ import { useGoogleLogin } from '@react-oauth/google';
 import useStyles from './styles';
 import Input from './Input';
 import Icon from './Icon';
+import { signin, signup } from '../../actions/auth';
+
+const initialState = { firstname: '', lastname: '', email: '', password: '', confirmPassword: '' };
 
 const Auth = () => {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
+  const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
+    // console.log(formData);
+    if(isSignUp) {
+      /* `dispatch(signup(formData, navigate));` is dispatching an action to the Redux store to sign up
+      a user with the form data provided in the `formData` state variable and to navigate to a new
+      page using the `navigate` function provided by the `react-router-dom` library. The `signup`
+      action is defined in the `auth` action creator file and contains the logic for making an API
+      call to the server to register a new user with the provided form data. */
+      dispatch(signup(formData, navigate));
+    } else {
+      dispatch(signin(formData, navigate));
+    }
   }
 
-  const handleChange = () => {
-
+  const handleChange = (e) => {
+    /* `setFormData({ ...formData, [e.target.name]: e.target.value });` is updating the state variable
+    `formData` by spreading the previous state and updating the value of the property with the name
+    equal to the `name` attribute of the input element that triggered the `handleChange` function
+    with the new value of that input element. This is a common pattern used in React to update state
+    variables that have multiple properties. */
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   }
 
   /**
