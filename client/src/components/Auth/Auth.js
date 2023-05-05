@@ -51,7 +51,10 @@ const Auth = () => {
   /**
    * This function toggles the value of a state variable called "isSignUp".
    */
-  const switchMode = () => setIsSignUp((signedUp) => !signedUp);
+  const switchMode = () => {
+    setIsSignUp((signedUp) => !signedUp);
+    setShowPassword(false);
+  }
 
   /**
    * This function toggles the visibility of a password input field.
