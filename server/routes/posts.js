@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { getPosts, createPost, updatePost, deletePost, likePost } from '../controllers/posts.js';
+import auth from '../middleware/auth.js';
 
 /* This creates a new instance of an Express router. This router can
 be used to define routes for handling HTTP requests. */
@@ -15,21 +16,21 @@ router.get('/', getPosts);
 path ('/'). When a POST request is made to this path, the `createPost` function from the `posts.js`
 controller will be executed to handle the request and send a response. This route is typically used
 for creating new resources on the server. */
-router.post('/', createPost);
+router.post('/', auth, createPost);
 
 /* `router.patch('/:id', updatePost);` is defining a route for handling HTTP PATCH requests to a
 specific URL path that includes an `id` parameter. When a PATCH request is made to this path, the
 `updatePost` function from the `posts.js` controller will be executed to handle the request and send
 a response. This route is typically used for updating an existing resource on the server. The `id`
 parameter in the URL path allows the server to identify which resource to update. */
-router.patch('/:id', updatePost);
+router.patch('/:id', auth, updatePost);
 
 /* `router.delete('/:id', deletePost);` is defining a route for handling HTTP DELETE requests to a
 specific URL path that includes an `id` parameter. When a DELETE request is made to this path, the
 `deletePost` function from the `posts.js` controller will be executed to handle the request and send
 a response. This route is typically used for deleting an existing resource on the server. The `id`
 parameter in the URL path allows the server to identify which resource to delete. */
-router.delete('/:id', deletePost);
+router.delete('/:id', auth, deletePost);
 
 /* `router.patch('/:id/likePost', likePost);` is defining a route for handling HTTP PATCH requests to a
 specific URL path that includes an `id` parameter and the string "likePost". When a PATCH request is
@@ -37,6 +38,6 @@ made to this path, the `likePost` function from the `posts.js` controller will b
 the request and send a response. This route is typically used for updating the "like" count of an
 existing resource on the server. The `id` parameter in the URL path allows the server to identify
 which resource to update. */
-router.patch('/:id/likePost', likePost);
+router.patch('/:id/likePost', auth, likePost);
 
 export default router;

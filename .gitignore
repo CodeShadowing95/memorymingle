@@ -1,3 +1,4 @@
 /.sendToRepo
 
 server/.env
+server/node_modules

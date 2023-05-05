@@ -5,6 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 import postRoutes from './routes/posts.js';
+import userRoutes from './routes/users.js';
 
 /* This is creating an instance of the Express application. This instance will be
 used to define the routes and middleware for the application. */
@@ -37,6 +38,7 @@ the application to use the `postRoutes` middleware for any requests that start w
 path. This means that any requests to the `/posts` path will be handled by the `postRoutes`
 middleware, which is defined in the `./routes/posts` file. */
 app.use('/posts', postRoutes);
+app.use('/user', userRoutes);
 
 // Connect the server application with the real database
 const PORT = process.env.PORT || 5000;
