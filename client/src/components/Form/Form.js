@@ -8,7 +8,7 @@ import { createPost, updatePost } from '../../actions/posts';
 
 const Form = ({ currentId, setCurrentId }) => {
   const classes = useStyles();
-  const [postData, setPostData] = useState({ creator: '', title: '', message: '', tags: '', image: '' });
+  const [postData, setPostData] = useState({ title: '', message: '', tags: '', image: '' });
   /* This is using the `useSelector` hook from the `react-redux` library to select a specific post
   from the Redux store's state. */
   const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null);
@@ -16,6 +16,7 @@ const Form = ({ currentId, setCurrentId }) => {
   allows the `Form` component to interact with the Redux store and update the state of the
   application. */
   const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem('profile'));
 
   /* `useEffect(() => { if(post) setPostData(post); }, [post]);` is a hook that is used to update the
   `postData` state whenever the `post` state changes. It checks if there is a `post` object (which
@@ -31,40 +32,36 @@ const Form = ({ currentId, setCurrentId }) => {
     e.preventDefault();
 
     if(currentId) {
-      dispatch(updatePost(currentId, postData));
+      dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }));
     } else {
       /* `dispatch(createPost(postData));` is dispatching an action to the Redux store. The `createPost`
       action creator is called with the `postData` object as an argument, which contains the data
       entered by the user in the form. This action is then handled by the Redux store, which updates
       the state of the application accordingly. */
-      dispatch(createPost(postData));
+      dispatch(createPost({ ...postData, name: user?.result?.name }));
     }
     clear();
   }
 
   const clear = () => {
     setCurrentId(null);
-    setPostData({ creator: '', title: '', message: '', tags: '', image: '' });
+    setPostData({ title: '', message: '', tags: '', image: '' });
+  }
+
+  if(!user?.result?.name) {
+    return (
+      <Paper className={classes.paper}>
+        <Typography variant="h6" align="center">
+          Please log in to create your own memories and like other's memories.
+        </Typography>
+      </Paper>
+    )
   }
   
   return (
     <Paper className={classes.paper}>
       <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
         <Typography variant="h6">{ currentId ? 'Ediing your post' : 'What do you want to share with us ?'}</Typography>
-        <TextField
-          name="creator"
-          variant="outlined"
-          label="Creator"
-          fullWidth
-          value={postData.creator}
-          /* `onChange={(e) => setPostData({ ...postData, creator: e.target.value })}` is a function
-          that is called when the value of the `TextField` component changes. It updates the
-          `postData` state by creating a new object with the spread operator (`...postData`) to copy
-          the existing state, and then updating the `creator` property with the new value from the
-          `TextField` component (`e.target.value`). This allows the form to capture and store the
-          user's input for the `creator` field. */
-          onChange={(e) => setPostData({ ...postData, creator: e.target.value })}
-        />
         <TextField name="title" variant="outlined" label="Title" fullWidth value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} />
         <TextField name="message" variant="outlined" multiline minRows={5} label="Message" fullWidth value={postData.message} onChange={(e) => setPostData({ ...postData, message: e.target.value })} />
         <TextField name="tags" variant="outlined" label="Tags" fullWidth value={postData.tags} onChange={(e) => setPostData({ ...postData, tags: e.target.value.split(',') })} />

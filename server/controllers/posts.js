@@ -29,11 +29,12 @@ export const createPost = async (req, res) => {
   that the user is trying to create. This data will be used to create a new instance of the
   `PostMessage` model and save it to the database. */
   const post = req.body;
+  console.log(post);
 
   /* create a new instance of the `PostMessage` model
   with the data from the `post` object, which is likely the data for a new post that the user is
   trying to create. This new instance will be saved to the database in the `createPost` function. */
-  const newPost = new PostMessage(post);
+  const newPost = new PostMessage({ ...post, creator: req.userId, createdAt: new Date().toISOString()} );
 
   try {
     /* save a new instance of the `PostMessage` model to the database. The

@@ -2,6 +2,18 @@ import axios from 'axios';
 
 const API = axios.create({ baseURL: 'http://localhost:5000' });
 
+/* This code is creating an Axios interceptor that adds an Authorization header to every outgoing
+request if there is a valid user token stored in the browser's localStorage. The header value is set
+to "Bearer" followed by the user token. This is a common way to authenticate requests to a server
+that requires authentication. */
+API.interceptors.request.use((req) => {
+  if (localStorage.getItem('profile')) {
+    req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`;
+  }
+
+  return req;
+});
+
 /**
  * The function `fetchPosts` uses Axios to make a GET request to a specified URL.
  */
