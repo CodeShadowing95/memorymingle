@@ -1,4 +1,4 @@
-import { FETCH_ALL, CREATE, UPDATE, DELETE, LIKE } from '../constants/actionTypes';
+import { FETCH_ALL, FETCH_BY_SEARCH, CREATE, UPDATE, DELETE, LIKE } from '../constants/actionTypes';
 
 /**
  * This is a reducer function that handles two actions, 'FETCH_ALL' and 'CREATE', but currently returns
@@ -18,6 +18,8 @@ const reducer = (posts = [], action) => {
       /* `return action.payload;` is returning the `payload` property of the `action` object when the
       `type` property of the `action` object is `'FETCH_ALL'`. This means that the `posts` array is
       being replaced with the new array of posts that is contained in the `payload` property. */
+      return action.payload;
+    case FETCH_BY_SEARCH:
       return action.payload;
     case CREATE:
       /* `[...posts, action.payload]` is creating a new array that includes all the elements of the

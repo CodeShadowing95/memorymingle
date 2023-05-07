@@ -57,21 +57,22 @@ const Home = () => {
   }, [currentId, dispatch]);
 
   const searchPost = () => {
-    if(search.trim()) {
+    if(search.trim() || tags) {
       // dispatch => fetch search post
       dispatch(getPostsBySearch({ search, tags: tags.join(',') }));
+      navigate(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`);
     } else {
       navigate("/");
     }
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyPress = (e) => {
     /* The `if` statement is checking if the `keyCode` property
     of the `e` event object is equal to 13, which corresponds to the Enter key. */
     if(e.keyCode === 13) {
       searchPost();
     }
-  }
+  };
 
   /**
    * This function adds a new tag to an array of tags.
@@ -103,7 +104,7 @@ const Home = () => {
                 name="search"
                 variant="outlined"
                 label="Search Memories"
-                onKeyDown={handleKeyDown}
+                onKeyPress={handleKeyPress}
                 fullWidth
                 value={search}
                 onChange={(e) => {setSearch(e.target.value)}}
