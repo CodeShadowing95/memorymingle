@@ -24,6 +24,35 @@ export const getPosts = async (req, res) => {
   }
 }
 
+export const getPostsBySearch = async (req, res) => {
+  /* `This is commonly used in Express.js to extract specific properties from an object and
+  assign them to variables for easier use in the code. In this case, it is likely that the `query`
+  object contains search parameters for a search query, and these parameters are being extracted to
+  be used in the route handler function. */
+  const { searchQuery, tags } = req.query;
+
+  try {
+    /* `const title = new RegExp(searchQuery, 'i');` is creating a regular expression object `title`
+    with the `searchQuery` string as the pattern to match. The `'i'` flag is used to make the
+    regular expression case-insensitive. This regular expression object is likely used to search for
+    posts with a title that matches the `searchQuery` string. */
+    const title = new RegExp(searchQuery, 'i');
+
+    /* This line of code is querying the database to find all posts that match either of the following
+    conditions:
+    1. The `title` field of the post matches the `searchQuery` string provided in the request.
+    2. The `tags` field of the post contains any of the tags provided in the `tags` query parameter
+    of the request. */
+    const posts = await PostMessage.find({ $or: [ { title }, { tags: { $in: tags.split(',') } } ] });
+
+    /* `res.json({ data: posts });` is sending a JSON response to the client with an object containing
+    a `data` property, which contains an array of posts retrieved from the database. */
+    res.json({ data: posts });
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+}
+
 export const createPost = async (req, res) => {
   /* In this case, it is likely that `req.body` contains the data for a new post
   that the user is trying to create. This data will be used to create a new instance of the

@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { getPosts, createPost, updatePost, deletePost, likePost } from '../controllers/posts.js';
+import { getPosts, getPostsBySearch, createPost, updatePost, deletePost, likePost } from '../controllers/posts.js';
 import auth from '../middleware/auth.js';
 
 /* This creates a new instance of an Express router. This router can
@@ -11,6 +11,8 @@ const router = express.Router();
 ('/'). When a GET request is made to this path, the `getPosts` function from the `posts.js`
 controller will be executed to handle the request and send a response. */
 router.get('/', getPosts);
+
+router.get('/search', getPostsBySearch);
 
 /* `router.post('/', createPost);` is defining a route for handling HTTP POST requests to the root URL
 path ('/'). When a POST request is made to this path, the `createPost` function from the `posts.js`
