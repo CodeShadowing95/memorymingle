@@ -18,6 +18,7 @@ API.interceptors.request.use((req) => {
  * The function `fetchPosts` uses Axios to make a GET request to a specified URL.
  */
 export const fetchPosts = () => API.get('/posts');
+export const fetchPostsBySearch = (searchQuery) => API.get(`/posts/search?searchQuery=${searchQuery.search || 'none'}&tags=${searchQuery.tags}`);
 /**
  * This function sends a POST request to a specified URL with a new post as the payload.
  * @param newPost - The `newPost` parameter is an object that represents the data for a new post that
