@@ -19,7 +19,7 @@ const Posts = ({ setCurrentId }) => {
     !posts.length ? <CircularProgress /> : (
       <Grid className={classes.container} container alignItems="stretch" spacing={3}>
         {posts.map((post) => (
-          <Grid item key={post._id} xs={12} sm={6}>
+          <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
             {/* `<Post post={post} setCurrentId={setCurrentId} />` is rendering the `Post` component and
             passing two props to it: `post` and `setCurrentId`. The `post` prop is an object
             containing information about a single post, and the `setCurrentId` prop is a function
