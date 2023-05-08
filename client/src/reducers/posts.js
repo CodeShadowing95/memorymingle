@@ -12,44 +12,61 @@ import { FETCH_ALL, FETCH_BY_SEARCH, CREATE, UPDATE, DELETE, LIKE } from '../con
  * @returns In both the 'FETCH_ALL' and 'CREATE' cases, the reducer is returning the current state of
  * the 'posts' array. In the default case, it is also returning the current state of the 'posts' array.
  */
-const reducer = (posts = [], action) => {
+const reducer = (state = [], action) => {
   switch (action.type) {
     case FETCH_ALL:
-      /* `return action.payload;` is returning the `payload` property of the `action` object when the
-      `type` property of the `action` object is `'FETCH_ALL'`. This means that the `posts` array is
-      being replaced with the new array of posts that is contained in the `payload` property. */
-      return action.payload;
+      /* This code is handling the 'FETCH_ALL' action in the reducer. It is returning a new state
+      object that includes all the properties of the previous state object (using the spread
+      operator `...state`) and overwriting the `posts`, `currentPage`, and `numberOfPages`
+      properties with the corresponding values from the `action.payload` object. This ensures that
+      the previous state is not modified directly, which is important for maintaining the principle
+      of immutability in Redux. The updated state object is then returned as the new state of the
+      reducer. */
+      return {
+        ...state,
+        posts: action.payload.data,
+        currentPage: action.payload.currentPage,
+        numberOfPages: action.payload.numberOfPages,
+      };
     case FETCH_BY_SEARCH:
-      return action.payload;
+      /* This line of code is handling the 'FETCH_BY_SEARCH' action in the reducer. It is returning a
+      new state object that includes all the properties of the previous state object (using the
+      spread operator `...state`) and overwriting the `posts` property with the `data` property of
+      the `action.payload` object. This ensures that the previous state is not modified directly,
+      which is important for maintaining the principle of immutability in Redux. The updated state
+      object is then returned as the new state of the reducer. */
+      return { ...state, posts: action.payload };
     case CREATE:
-      /* `[...posts, action.payload]` is creating a new array that includes all the elements of the
-      `posts` array (using the spread operator `...`) and adding the `action.payload` object to the
-      end of the new array. This is used in the 'CREATE' case of the reducer to add a new post to
-      the existing array of posts. By creating a new array instead of modifying the existing one,
-      the reducer ensures that it is following the principle of immutability, which is important for
-      predictable state management in Redux. */
-      return [...posts, action.payload];
+      /* `return [...state, action.payload];` is adding a new post to the existing array of posts in
+      the state. It creates a new array using the spread operator `...state` to include all the
+      existing posts in the state, and then adds the new post object `action.payload` to the end of
+      the array. This ensures that the previous state is not modified directly, which is important
+      for maintaining the principle of immutability in Redux. The updated state object is then
+      returned as the new state of the reducer. */
+      return [...state, action.payload];
     case UPDATE:
-      /* This line of code is handling the 'UPDATE' action in the reducer. It is using the `map()`
-      method to create a new array of posts where each post is either the updated post (if its `_id`
-      property matches the `_id` property of the `action.payload` object) or the original post (if
-      its `_id` property does not match). This ensures that the original `posts` array is not
-      modified directly, which is important for maintaining the principle of immutability in Redux.
-      The updated array of posts is then returned as the new state of the reducer. */
-      return posts.map((post) => post._id === action.payload._id ? action.payload : post);
+      /* This line of code is handling the 'UPDATE' and 'LIKE' actions in the reducer. It is returning
+      a new state object that includes all the properties of the previous state object (using the
+      spread operator `...state`) and updating the post object that matches the `_id` property in
+      the `action.payload` object. */
+      return state.map((post) => post._id === action.payload._id ? action.payload : post);
     case DELETE:
-      /* This line of code is handling the 'DELETE' action in the reducer. It is using the `filter()`
-      method to create a new array of posts where each post is included only if its `_id` property
-      does not match the `_id` property of the `action.payload` object. This ensures that the post
-      with the matching `_id` is removed from the original `posts` array without modifying it
-      directly, which is important for maintaining the principle of immutability in Redux. The
-      updated array of posts is then returned as the new state of the reducer. */
-      return posts.filter((post) => post._id !== action.payload);
+      /* This line of code is handling the 'DELETE' action in the reducer. It is returning a new state
+      object that includes all the properties of the previous state object (using the spread
+      operator `...state`) but with the post object that matches the `_id` property in the
+      `action.payload` object removed from the `posts` array. The `filter()` method is used to
+      create a new array that includes all the elements from the original array that meet a certain
+      condition. In this case, the condition is that the `_id` property of each post object in the
+      array is not equal to the `_id` property in the `action.payload` object, which represents the
+      post that needs to be deleted. This ensures that the previous state is not modified directly,
+      which is important for maintaining the principle of immutability in Redux. The updated state
+      object is then returned as the new state of the reducer. */
+      return state.filter((post) => post._id !== action.payload);
     case LIKE:
       // Similar to UPDATE
-      return posts.map((post) => post._id === action.payload._id ? action.payload : post);
+      return state.map((post) => post._id === action.payload._id ? action.payload : post);
     default:
-      return posts;
+      return state;
   }
 }
 

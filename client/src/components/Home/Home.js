@@ -52,9 +52,9 @@ const Home = () => {
   `getPosts()` action to the Redux store when the component mounts or when the `currentId` or
   `dispatch` values change. This will trigger the Redux store to fetch the posts data and update the
   state of the application. */
-  useEffect(() => {
-    dispatch(getPosts());
-  }, [currentId, dispatch]);
+  // useEffect(() => {
+  //   dispatch(getPosts());
+  // }, [currentId, dispatch]);
 
   const searchPost = () => {
     if(search.trim() || tags) {
@@ -120,8 +120,8 @@ const Home = () => {
               <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">Search</Button>
             </AppBar>
             <Form currentId={currentId} setCurrentId={setCurrentId} />
-            <Paper elevation={6}>
-              <Pagination />
+            <Paper className={classes.pagination} elevation={6}>
+              <Pagination page={page} />
             </Paper>
           </Grid>
         </Grid>

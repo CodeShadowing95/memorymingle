@@ -2,13 +2,15 @@ import { FETCH_ALL, FETCH_BY_SEARCH, CREATE, UPDATE, DELETE, LIKE } from '../con
 import * as api from '../api';
 
 //Action Creators
-export const getPosts = () => async (dispatch) => {
+export const getPosts = (page) => async (dispatch) => {
   try {
     /* `const { data } = await api.fetchPosts();` is destructuring the response object returned by the
     `fetchPosts()` function from the `api` module. It is extracting the `data` property from the
     response object and assigning it to a variable named `data`. This allows us to access the `data`
     property directly without having to reference the response object every time. */
-    const { data } = await api.fetchPosts();
+    const { data } = await api.fetchPosts(page);
+
+    console.log(data);
 
     /* `dispatch({ type: 'FETCH_ALL', payload: data });` is dispatching an action to the Redux store.
     The action has a type of `'FETCH_ALL'` and a payload of `data`. This action will be handled by

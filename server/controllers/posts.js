@@ -4,18 +4,35 @@ import mongoose from 'mongoose';
 import PostMessage from '../models/postMessage.js';
 
 export const getPosts = async (req, res) => {
-  try {
-    /* It queries the database to retrieve all the
-    documents from the `PostMessage` collection and storing them in the `postMessages` variable. The
-    `await` keyword is used to wait for the database operation to complete before moving on to the
-    next line of code. */
-    const postMessages = await PostMessage.find();
+  const { page } = req.query;
 
-    /* `res.status(200).json(postMessages);` is setting the HTTP response status code to 200 (OK) and
-    sending a JSON response with the `postMessages` array, which contains all the documents from the
-    `PostMessage` collection in the database. This is typically used when the requested resource has
-    been successfully retrieved from the server. */
-    res.status(200).json(postMessages);
+  try {
+    const LIMIT = 9;
+    // Get the starting index of every page
+    const startIndex = (Number(page) - 1) * LIMIT;
+    /* The above code is using JavaScript to count the number of documents in a MongoDB collection
+    called "PostMessage" and storing the result in a constant variable called "total". The "await"
+    keyword is used to wait for the count operation to complete before assigning the result to the
+    "total" variable. */
+    const total = await PostMessage.countDocuments({});
+
+    /* The above code is using the `await` keyword to asynchronously retrieve all documents from a
+    MongoDB collection called `PostMessage` and store them in the `postMessages` variable. */
+    // const postMessages = await PostMessage.find();
+
+    /* The above code is using the Mongoose library to query a MongoDB database for PostMessage
+    documents. It is sorting the results in descending order(from the newest to the oldest) by the _id field, limiting the number
+    of results to a specified LIMIT, and skipping a specified number of documents from the beginning
+    of the results. The results are then stored in the posts variable. The await keyword is used to
+    wait for the query to complete before continuing execution. */
+    const posts = await PostMessage.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
+
+    /* The above code is sending a JSON response with data containing an array of posts, the current
+    page number, and the total number of pages. The current page number is converted to a number
+    using the Number() function, and the total number of pages is calculated by dividing the total
+    number of posts by the limit per page and then rounding up using the Math.ceil() function. The
+    response status code is set to 200, indicating a successful request. */
+    res.status(200).json({ data: posts, currentPage: Number(page), numberOfPages: Math.ceil(total / LIMIT) });
   } catch (error) {
     /* set the HTTP response status code to
     404 (Not Found) and sending a JSON response with an error message in the `message` field. This

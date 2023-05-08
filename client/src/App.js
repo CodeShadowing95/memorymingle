@@ -27,7 +27,7 @@ const App = () => {
           route will only match if the path is exactly "/posts/:id". The "element" prop is set to
           the <PostDetails /> component, which will render the details of a specific post based on
           the value of the ":id" parameter in the URL. */}
-          <Route path="/posts/:id" exact element={<PostDetails />} />
+          <Route path="/posts/:id" element={<PostDetails />} />
           {/* This code is defining a route for the "/auth" path. If there is no user (i.e. the user is
           not logged in), the "element" prop will be set to the <Auth /> component, which will
           render the authentication page. If there is a user (i.e. the user is already logged in),
