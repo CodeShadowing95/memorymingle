@@ -1,4 +1,4 @@
-import { FETCH_ALL, FETCH_BY_SEARCH, CREATE, UPDATE, DELETE, LIKE } from '../constants/actionTypes';
+import { FETCH_ALL, FETCH_BY_SEARCH, START_LOADING, END_LOADING, CREATE, UPDATE, DELETE, LIKE } from '../constants/actionTypes';
 
 /**
  * This is a reducer function that handles two actions, 'FETCH_ALL' and 'CREATE', but currently returns
@@ -12,8 +12,12 @@ import { FETCH_ALL, FETCH_BY_SEARCH, CREATE, UPDATE, DELETE, LIKE } from '../con
  * @returns In both the 'FETCH_ALL' and 'CREATE' cases, the reducer is returning the current state of
  * the 'posts' array. In the default case, it is also returning the current state of the 'posts' array.
  */
-const reducer = (state = [], action) => {
+const reducer = (state = { isLoading: true, posts: [] }, action) => {
   switch (action.type) {
+    case START_LOADING:
+      return { ...state, isLoading: true };
+    case END_LOADING:
+      return { ...state, isLoading: false };
     case FETCH_ALL:
       /* This code is handling the 'FETCH_ALL' action in the reducer. It is returning a new state
       object that includes all the properties of the previous state object (using the spread
@@ -43,13 +47,13 @@ const reducer = (state = [], action) => {
       the array. This ensures that the previous state is not modified directly, which is important
       for maintaining the principle of immutability in Redux. The updated state object is then
       returned as the new state of the reducer. */
-      return [...state, action.payload];
+      return { ...state, posts: [...state.posts, action.payload] };
     case UPDATE:
       /* This line of code is handling the 'UPDATE' and 'LIKE' actions in the reducer. It is returning
       a new state object that includes all the properties of the previous state object (using the
       spread operator `...state`) and updating the post object that matches the `_id` property in
       the `action.payload` object. */
-      return state.map((post) => post._id === action.payload._id ? action.payload : post);
+      return { ...state, posts: state.posts.map((post) => post._id === action.payload._id ? action.payload : post) };
     case DELETE:
       /* This line of code is handling the 'DELETE' action in the reducer. It is returning a new state
       object that includes all the properties of the previous state object (using the spread
@@ -61,10 +65,10 @@ const reducer = (state = [], action) => {
       post that needs to be deleted. This ensures that the previous state is not modified directly,
       which is important for maintaining the principle of immutability in Redux. The updated state
       object is then returned as the new state of the reducer. */
-      return state.filter((post) => post._id !== action.payload);
+      return { ...state, posts: state.posts.filter((post) => post._id !== action.payload) };
     case LIKE:
       // Similar to UPDATE
-      return state.map((post) => post._id === action.payload._id ? action.payload : post);
+      return { ...state, posts: state.posts.map((post) => post._id === action.payload._id ? action.payload : post) };
     default:
       return state;
   }

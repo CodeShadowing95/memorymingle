@@ -1,9 +1,10 @@
-import { FETCH_ALL, FETCH_BY_SEARCH, CREATE, UPDATE, DELETE, LIKE } from '../constants/actionTypes';
+import { FETCH_ALL, FETCH_BY_SEARCH, START_LOADING, END_LOADING, CREATE, UPDATE, DELETE, LIKE } from '../constants/actionTypes';
 import * as api from '../api';
 
 //Action Creators
 export const getPosts = (page) => async (dispatch) => {
   try {
+    dispatch({ type: START_LOADING });
     /* `const { data } = await api.fetchPosts();` is destructuring the response object returned by the
     `fetchPosts()` function from the `api` module. It is extracting the `data` property from the
     response object and assigning it to a variable named `data`. This allows us to access the `data`
@@ -17,6 +18,7 @@ export const getPosts = (page) => async (dispatch) => {
     the reducer function associated with the `'FETCH_ALL'` type, which will update the state of the
     store with the new data. */
     dispatch({ type: FETCH_ALL, payload: data });
+    dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error.message);
   }
@@ -24,9 +26,11 @@ export const getPosts = (page) => async (dispatch) => {
 
 export const getPostsBySearch = (searchQuery) => async (dispatch) => {
   try {
+    dispatch({ type: START_LOADING });
     const { data: { data } } = await api.fetchPostsBySearch(searchQuery);
 
     dispatch({ type: FETCH_BY_SEARCH, payload: data });
+    dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);
   }
@@ -34,6 +38,7 @@ export const getPostsBySearch = (searchQuery) => async (dispatch) => {
 
 export const createPost = (post) => async (dispatch) => {
   try {
+    dispatch({ type: START_LOADING });
     /* `const { data } = await api.createPost(post);` is destructuring the response object returned by
     the `createPost()` function from the `api` module. It is extracting the `data` property from the
     response object and assigning it to a variable named `data`. This allows us to access the `data`
@@ -45,6 +50,7 @@ export const createPost = (post) => async (dispatch) => {
     function associated with the `'CREATE'` type, which will update the state of the store with the
     new data. */
     dispatch({ type: CREATE, payload: data });
+    dispatch({ type: END_LOADING });
   } catch (error) {
     console.log(error);
   }
