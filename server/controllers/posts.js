@@ -41,6 +41,18 @@ export const getPosts = async (req, res) => {
   }
 }
 
+export const getPost = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const post = await PostMessage.findById(id);
+
+    res.status(200).json(post);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+}
+
 export const getPostsBySearch = async (req, res) => {
   /* `This is commonly used in Express.js to extract specific properties from an object and
   assign them to variables for easier use in the code. In this case, it is likely that the `query`

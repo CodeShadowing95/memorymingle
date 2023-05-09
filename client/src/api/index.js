@@ -14,6 +14,7 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
+export const fetchPost = (id) => API.get(`/posts/${id}`);
 /**
  * The function `fetchPosts` uses Axios to make a GET request to a specified URL.
  */

@@ -1,4 +1,4 @@
-import { FETCH_ALL, FETCH_BY_SEARCH, START_LOADING, END_LOADING, CREATE, UPDATE, DELETE, LIKE } from '../constants/actionTypes';
+import { FETCH_ALL, FETCH_POST, FETCH_BY_SEARCH, START_LOADING, END_LOADING, CREATE, UPDATE, DELETE, LIKE } from '../constants/actionTypes';
 
 /**
  * This is a reducer function that handles two actions, 'FETCH_ALL' and 'CREATE', but currently returns
@@ -32,6 +32,8 @@ const reducer = (state = { isLoading: true, posts: [] }, action) => {
         currentPage: action.payload.currentPage,
         numberOfPages: action.payload.numberOfPages,
       };
+    case FETCH_POST:
+      return { ...state, post: action.payload };
     case FETCH_BY_SEARCH:
       /* This line of code is handling the 'FETCH_BY_SEARCH' action in the reducer. It is returning a
       new state object that includes all the properties of the previous state object (using the
